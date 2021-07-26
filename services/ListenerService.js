@@ -5,8 +5,6 @@ const {
 let  messageQueue = require('./MessageService');
 const MessageModel = require('./../models/MessageSample');
 messageQueue = new messageQueue()
-
-//let database = require('./../connections/mongo-con');
 class ListenerService extends EventEmitter {
   constructor() {
     super();
@@ -15,13 +13,6 @@ class ListenerService extends EventEmitter {
   processMessage(data){
     let encryptedMessages = data.split("|");
     messageQueue.enqueue(JSON.stringify({messages:data,event_timestamp:new Date()}))
-
-
-    encryptedMessages.forEach(message => {
-      //let _message = MessageEncodingDecodingUtil.decrypt(message);
-      //let originalMessage = JSON.parse(_message);
-      //originalMessage.created_at = new Date();
-    });
   }
 }
 
