@@ -1,0 +1,29 @@
+{
+  "name": "syook-data-listener-app",
+  "version": "1.0.0",
+  "description": "listener service that will decode the message from emitter service",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thedevis/syook-data-listener-app.git"
+  },
+  "keywords": [
+    "syook"
+  ],
+  "author": "Praveen Kumar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thedevis/syook-data-listener-app/issues"
+  },
+  "homepage": "https://github.com/thedevis/syook-data-listener-app#readme",
+  "dependencies": {
+    "amqplib": "^0.8.0",
+    "dotenv": "^10.0.0",
+    "mongoose": "^5.13.3",
+    "socket.io-client": "^4.1.3"
+  }
+}
