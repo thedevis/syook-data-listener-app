@@ -13,7 +13,6 @@ connection
   .then(async (conn) => {
     const channel = await conn.createChannel();
     channel.consume(config.rabbitMQ.queue, async (m) => {
-      socketIO.emit("message","Praveen");
       let { messages, event_timestamp } = JSON.parse(m.content.toString());
       let timeSeriesData = {};
       let encryptedMessages = messages.split("|");
@@ -21,11 +20,20 @@ connection
       let _seconds = timeStampInMinute.getSeconds();
       timeStampInMinute.setSeconds(0);
       timeStampInMinute.setMilliseconds(0);
+
+      let totalValidMessageCount = 0;
+      let totalInvalidMessageCount = 0;
+      let decryptedMessages=[];
+
       encryptedMessages.forEach((message) => {
         let decryptedMessage = MessageEncodingDecodingUtil.decrypt(message);
         decryptedMessage = JSON.parse(decryptedMessage);
-        let isValidMessage =
-          MessageEncodingDecodingUtil.verifySignature(decryptedMessage);
+        let isValidMessage =MessageEncodingDecodingUtil.verifySignature(decryptedMessage);
+        if(isValidMessage){
+          totalValidMessageCount++;
+        } else {
+          totalInvalidMessageCount++;
+        }
         delete decryptedMessage.secret_key;
         decryptedMessage.created_at = new Date();
         let _messageIndex = decryptedMessage.created_at.getSeconds();
@@ -33,6 +41,7 @@ connection
         if (timeSeriesData[timeStampInMinute.getTime()]) {
           timeSeriesData[timeStampInMinute.getTime()].total_message_count++;
           if (isValidMessage) {
+            decryptedMessages.push(decryptedMessage);
             timeSeriesData[timeStampInMinute.getTime()].message_data[
               _messageIndex
             ].push(decryptedMessage);
@@ -52,9 +61,12 @@ connection
               0,
               [decryptedMessage]
             );
+          } else {
           }
         }
       });
+      socketIO.emit("message",{encryptedMessages:messages,decryptedMessage:{totalValidMessageCount:totalValidMessageCount,totalInvalidMessageCount:totalInvalidMessageCount,messages:decryptedMessages}});
+
 
       let minuteWiseDateMap = Object.keys(timeSeriesData).sort();
       for(let time of minuteWiseDateMap){

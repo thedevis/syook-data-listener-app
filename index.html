@@ -1,17 +1,80 @@
-<html>
-<head></head>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <style>
+      #encryptText,
+      #decryptText {
+        overflow-wrap: anywhere;
+        padding: 10px;
+        height: 400px;
+        overflow: scroll;
+        border: 2px solid #e4e4e4;
+        margin: 10px auto;
+      }
+      .navbar-default {
+        background-color: transparent;
+        border-color: transparent;
+      }
+    </style>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#"
+            ><img
+              src="https://syook.com/wp-content/uploads/2019/08/Syooklogo-n.png"
+              alt=""
+          /></a>
+        </div>
+      </div>
+    </nav>
 
-<body>
-  <div id="message"></div>
+    <div class="container text-center">
+      <div class="row">
+        <div class="col-sm-12">
+          <h3>Incoming Encrypted Messages..</h3>
+          <div id="encryptText">
+            waiting for message to encryptedMessages...
+          </div>
+        </div>
+      </div>
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    var socket = io();
+      <div class="row">
+        <div class="col-sm-12">
+          <h3>Decrypted Messages..</h3>
+          <div class="messageStats">
+            <p id="totalMessage">Total Messages:</p>
+            <p id="invalidMessage">Failed Messages:</p>
+          </div>
+          <div id="decryptText">Decoding messages is in progress....</div>
+        </div>
+      </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io();
+      socket.on("message", function (data) {
+        let encryptedMessage = data.encryptedMessages;
+        document.getElementById("encryptText").innerHTML = encryptedMessage;
 
-    socket.on('message', function(msg){
-      console.log(msg);
-      document.getElementById("message").innerHTML = msg;
-    });
-  </script>
-</body>
+        document.getElementById("decryptText").innerHTML = JSON.stringify(
+          data.decryptedMessage.messages
+        );
+        document.getElementById("totalMessage").innerHTML =
+          data.decryptedMessage.totalValidMessageCount;
+        document.getElementById("invalidMessage").innerHTML =
+          data.decryptedMessage.totalInvalidMessageCount;
+      });
+    </script>
+  </body>
 </html>
