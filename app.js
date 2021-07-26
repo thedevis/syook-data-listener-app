@@ -5,8 +5,14 @@ const io = require("socket.io-client");
 const { ListenerService } = require("./services/ListenerService");
 const listerService = new ListenerService()
 let socket = io(config.app.EMITTER_SERVICE);
+
+const {app,socketIO}=require('./webapp');
 require('./services/MessageConsumer');
+app.get("/", function (req, res) {
+   res.sendFile(__dirname + "/index.html");
+ });
 socket.on("message", (data) => {
+   //socketIO.emit('message', data);
    listerService.processMessage(data);
 });
 socket.on("connect",()=>{
@@ -22,3 +28,7 @@ socket.on("end",()=>{
 socket.on("disconnect",()=>{
    console.log("end event");
 })
+
+
+
+

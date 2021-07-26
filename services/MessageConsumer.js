@@ -5,7 +5,7 @@ const amqp = require("amqplib");
 const connection = amqp.connect(config.rabbitMQ.connection);
 const db = require("./../connections/mongoConnection");
 const MessageModel = require("./../models/MessageSample");
-const Test = require("./../models/Test");
+const { socketIO } = require('./../webapp');
 const {
   MessageEncodingDecodingUtil,
 } = require("./../utils/MessageEncodingDecodingUtil");
@@ -13,6 +13,7 @@ connection
   .then(async (conn) => {
     const channel = await conn.createChannel();
     channel.consume(config.rabbitMQ.queue, async (m) => {
+      socketIO.emit("message","Praveen");
       let { messages, event_timestamp } = JSON.parse(m.content.toString());
       let timeSeriesData = {};
       let encryptedMessages = messages.split("|");
