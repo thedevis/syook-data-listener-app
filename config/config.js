@@ -3,14 +3,11 @@ const config={
     app:{
         SECRET_KEY:process.env.SECRET_KEY,
         IV:process.env.IV,
-        EMITTER_SERVICE:process.env.EMITTER_SERVICE_URL
+        EMITTER_SERVICE:process.env.EMITTER_SERVICE_URL,
+        PORT:process.env.PORT
     },
     mongo:{
-        host:process.env.MONGO_HOST,
-        port:process.env.MONGO_PORT,
-        database:process.env.MONGO_DATABASE,
-        username:process.env.MONGO_USERNAME,
-        password:process.env.MONGO_PASSWORD
+        connection:process.env.MONGO_CONNECTION_STRING
     },
     rabbitMQ:{
         connection:process.env.RABBIT_MQ_CONNECTION_STRING,

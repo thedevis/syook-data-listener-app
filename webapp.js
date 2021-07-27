@@ -1,8 +1,9 @@
+const config = require('./config/config')
 var app = require("express")();
 var http = require("http").Server(app);
 
-http.listen(3001, function () {
-  console.log("listening on *:3001");
+http.listen(config.app.PORT, function () {
+  console.log(`Server is running on ${config.app.PORT}`);
 });
 module.exports={
     app:app,

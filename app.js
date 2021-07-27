@@ -4,9 +4,8 @@ const config = require('./config/config');
 const io = require("socket.io-client");
 const { ListenerService } = require("./services/ListenerService");
 const listerService = new ListenerService()
-let socket = io(config.app.EMITTER_SERVICE);
-
 const {app,socketIO}=require('./webapp');
+let socket = io(config.app.EMITTER_SERVICE);
 require('./services/MessageConsumer');
 app.get("/", function (req, res) {
    res.sendFile(__dirname + "/index.html");
