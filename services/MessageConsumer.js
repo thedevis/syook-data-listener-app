@@ -1,6 +1,4 @@
 const config = require("./../config/config");
-config.rabbitMQ.connection = "amqp://localhost";
-config.rabbitMQ.queue = "message_queue";
 const amqp = require("amqplib");
 const connection = amqp.connect(config.rabbitMQ.connection);
 const db = require("./../connections/mongoConnection");
